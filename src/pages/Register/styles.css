@@ -15,6 +15,10 @@
     margin-right: 30px;
 }
 
+.register-container section.form h1 {
+    text-align: center;
+}
+
 .register-container section.form img {
     width: 30%;
     margin-left: auto;
@@ -25,5 +29,5 @@
 
 .register-container section.form form h1 {
     font-size: 32px;
-    margin-bottom: 32px;
+    margin-bottom: 10px;
 }
