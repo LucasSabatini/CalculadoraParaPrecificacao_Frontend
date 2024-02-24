@@ -34,8 +34,8 @@ export default function Register() {
     };
 
     return (
-        <div className="register-container">
-            <section className="form">
+        <div className='register-container'>
+            <section className='form'>
             <img src={logoImage} alt='Sabatini Logo'/>
                 <form onSubmit={register}>
                     <h1>Crie sua Conta</h1>
