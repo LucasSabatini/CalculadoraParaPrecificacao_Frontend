@@ -28,16 +28,16 @@ export default function Login() {
         try {
             const response = await api.post('api/auth/authenticate', data);
 
-            localStorage.setItem('token', response.data.token)
-            navigate('/rawmaterials')
+            localStorage.setItem('token', response.data.token);
+            navigate('/rawmaterials');
         } catch (err) {
             alert('Login falhou! Tente novamente.');
         }
     };
 
     return (
-        <div className="login-container">
-            <section className="form">
+        <div className='login-container'>
+            <section className='form'>
                 <img src={logoImage} alt='Sabatini Logo'/>
                 <form onSubmit={login}>
                     <h1>Acesse sua Conta</h1>
