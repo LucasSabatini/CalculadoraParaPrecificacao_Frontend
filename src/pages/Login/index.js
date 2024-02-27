@@ -28,7 +28,8 @@ export default function Login() {
         try {
             const response = await api.post('api/auth/authenticate', data);
 
-            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('firstName', response.data.firstName);
+            localStorage.setItem('accessToken', response.data.accessToken);
             navigate('/rawmaterials');
         } catch (err) {
             alert('Login falhou! Tente novamente.');
