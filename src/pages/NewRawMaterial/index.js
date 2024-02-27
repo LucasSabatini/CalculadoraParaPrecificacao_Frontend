@@ -18,7 +18,7 @@ export default function NewRawMaterial() {
     const [finalCost, setFinalCost] = useState('');
     const [user_id, setUser_id] = useState('');
 
-    const token = localStorage.getItem('token');
+    const accessToken = localStorage.getItem('accessToken');
 
     const navigate = useNavigate();
 
@@ -32,14 +32,10 @@ export default function NewRawMaterial() {
             weightPurchased,
         }
 
-        const header = {
-            Authorization: `Bearer ${token}`
-        }
-
         try {
             await api.post('api/materiaprima', data, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${accessToken}`
                 }
             });
             navigate('/rawmaterials');
