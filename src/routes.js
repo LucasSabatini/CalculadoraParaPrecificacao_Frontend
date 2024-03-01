@@ -14,7 +14,7 @@ export default function MainRoutes() {
                 <Route path="/login" Component={Login}/>
                 <Route path="/register" Component={Register}/>
                 <Route path="/rawmaterials" Component={RawMaterials}/>
-                <Route path="/rawmaterials/new" Component={NewRawMaterial}/>
+                <Route path="/rawmaterials/new/:rawMaterialId" Component={NewRawMaterial}/>
             </Routes>
         </BrowserRouter>
     );
