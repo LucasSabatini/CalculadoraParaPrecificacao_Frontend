@@ -20,6 +20,15 @@ export default function RawMaterials() {
         localStorage.clear();
         navigate('/');
     }
+
+    async function editRawMaterial(id) {
+        try {
+            navigate(`/rawmaterials/new/${id}`)
+        } catch (err) {
+            alert("Falha na atualização! Tente novamente.")
+        }
+    }
+
     async function deleteRawMaterial(id) {
         try {
             await api.delete(`api/materiaprima/${id}`, {
@@ -49,7 +58,7 @@ export default function RawMaterials() {
             <header>
                 <img src={logoImage} alt="Sabatini" />
                 <span>Bem Vindo, <strong>{firstName.toUpperCase()}</strong>!</span>
-                <Link className="button" to="/rawmaterials/new">Adicionar Nova Matéria-Prima</Link>
+                <Link className="button" to="/rawmaterials/new/0">Adicionar Nova Matéria-Prima</Link>
                 <button onClick={logout} type="button">
                     <FiPower size={18} color="#246DDA" />
                 </button>
@@ -69,7 +78,7 @@ export default function RawMaterials() {
                         <p>{rawMaterial.weightPurchased}g</p>
                         <strong>Custo Final:</strong>
                         <p>{Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(rawMaterial.finalCost)}</p>
-                        <button type="button">
+                        <button onClick={() => editRawMaterial(rawMaterial.id)} type="button">
                             <FiEdit size={20} color="#246DDA" />
                         </button>
                         <button onClick={() => deleteRawMaterial(rawMaterial.id)} type="button">
