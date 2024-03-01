@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 
 import api from '../../services/api';
@@ -18,11 +18,39 @@ export default function NewRawMaterial() {
     const [finalCost, setFinalCost] = useState('');
     const [user_id, setUser_id] = useState('');
 
+    const {rawMaterialId} = useParams();
+
     const accessToken = localStorage.getItem('accessToken');
 
     const navigate = useNavigate();
 
-    async function createNewRawMaterial(e) {
+    async function loadRawMaterial() {
+        try {
+            const response = await api.get(`api/materiaprima/${rawMaterialId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+
+            setId(response.data.id);
+            setNameRawMaterial(response.data.nameRawMaterial);
+            setPricePaid(response.data.pricePaid);
+            setWeightUsedInRecipe(response.data.weightUsedInRecipe);
+            setWeightPurchased(response.data.weightPurchased);
+            setFinalCost(response.data.finalCost);
+
+        } catch (err) {
+            alert('Erro ao carregar Matéria-Prima! Tente novamente.');
+            navigate('/rawmaterials');
+        }
+    }
+    
+    useEffect(() => {
+        if(rawMaterialId === '0') return;
+        else loadRawMaterial();
+    }, [rawMaterialId]);
+
+    async function saveOrUpdate(e) {
         e.preventDefault();
 
         const data = {
@@ -33,11 +61,21 @@ export default function NewRawMaterial() {
         }
 
         try {
-            await api.post('api/materiaprima', data, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
+            if (rawMaterialId === '0') {
+                await api.post('api/materiaprima', data, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+            } else {
+                data.id = rawMaterialId;
+                await api.put(`api/materiaprima/${id}`, data, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+            }
+            
             navigate('/rawmaterials');
         } catch (err) {
             alert('Erro ao cadastrar Matéria-Prima! Tente novamente.')
@@ -49,14 +87,14 @@ export default function NewRawMaterial() {
             <div className='content'>
                 <section className='form'>
                     <img src={logoImage} alt='Sabatini' />
-                    <h1>Adicionar Matéria-Prima</h1>
-                    <p>Insira os dados da Matéria-Prima e clique em Adicionar</p>
+                    <h1>{rawMaterialId === '0' ? 'Adicionar Matéria-Prima' : 'Atualizar Matéria-Prima'}</h1>
+                    <p>Insira os dados da Matéria-Prima e clique em {rawMaterialId === '0' ? "'Adicionar'" : "'Atualizar'"}</p>
                     <Link className='back-link' to='/rawmaterials'>
                         <FiArrowLeft size={16} color='#246DDA' />
-                        <span>Início</span>
+                        <span>Voltar ao Início</span>
                     </Link>
                 </section>
-                <form onSubmit={createNewRawMaterial}>
+                <form onSubmit={saveOrUpdate}>
                     <input
                         placeholder='Nome'
                         value={nameRawMaterial}
@@ -78,7 +116,7 @@ export default function NewRawMaterial() {
                         onChange={e => setWeightPurchased(e.target.value)}
                     />
 
-                    <button className='button' type='submit'>Adicionar</button>
+                    <button className='button' type='submit'>{rawMaterialId === '0' ? 'Adicionar' : 'Atualizar'}</button>
                 </form>
             </div>
         </div>
